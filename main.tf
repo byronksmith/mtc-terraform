@@ -62,7 +62,7 @@ resource "aws_security_group" "mtc_sg" {
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
-    cidr_blocks = ["73.32.234.37/32"]
+    cidr_blocks = ["myipaddress"]
   }
 
   egress {
@@ -95,9 +95,9 @@ resource "aws_instance" "dev_node" {
     tags = {
         Name = "dev_node"
     }
-
+# create provisioner to configure vscode on the terminal to be able to ssh into the ec2 instance
     provisioner "local-exec" {
-      command = templatefile("linux-ssh-config.tpl", {
+      command = templatefile("${var.host_os}-ssh-config.tpl", {
         hostname = self.public_ip,
         user = "ubuntu",
         identityfile = "~/.ssh/mtckey"
